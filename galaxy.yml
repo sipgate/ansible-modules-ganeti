@@ -17,18 +17,19 @@ readme: README.md
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- your name <example@domain.com>
+- sipgate GmbH <bearmetal@sipgate.de>
+- Stefan Valouch <@svalouch>
 
 
 ### OPTIONAL but strongly recommended
 
 # A short summary description of the collection
-description: your collection description
+description: Modules to manage ganeti instances.
 
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
 license:
-- BSD-3-Clause
+- GPLv3
 
 # A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
 # requirements as 'namespace' and 'name'
@@ -41,13 +42,13 @@ tags: ['ganeti']
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: http://example.com/repository
+repository: https://github.com/sipgate/ansible-modules-ganeti
 
 # The URL to any online docs
-documentation: http://docs.example.com
+documentation: https://github.com/sipgate/ansible-modules-ganeti
 
 # The URL to the homepage of the collection/project
-homepage: http://example.com
+homepage: https://github.com/sipgate/ansible-modules-ganeti
 
 # The URL to the collection issue tracker
-issues: http://example.com/issue/tracker
+issues: https://github.com/sipgate/ansible-modules-ganeti
