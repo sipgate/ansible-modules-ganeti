@@ -8,8 +8,8 @@ jobs:
     - uses: actions/checkout@master
     - name: Install requirements
       run: |
-            apt update && apt install python3 python3-pip
-            pip3 install -g pytest pytest-mock
+            sudo apt update && sudo apt install python3 python3-pip
+            sudo pip3 install -g pytest pytest-mock
     - name: Login to github docker repository
       run: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} docker.pkg.github.com
     - name: Pull the ganeti fake cluster docker image
