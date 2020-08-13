@@ -6,6 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    - name: Login to github docker repository
+      run: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} docker.pkg.github.com
     - name: Pull the ganeti fake cluster docker image
       run: docker pull docker.pkg.github.com/sipgate/ganeti-docker/image:latest
     - name: Run Docker Image
