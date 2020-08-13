@@ -1,5 +1,5 @@
 on: [push, pull_request]
-name: Flatpak
+name: Ansible modules ganeti
 jobs:
   test:
     name: "Test Ansible Modules"
@@ -7,7 +7,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Pull the ganeti fake cluster docker image
-      run: docker pull sipgate/ganeti-docker/image:latest
+      run: docker pull docker.pkg.github.com/sipgate/ganeti-docker/image:latest
     - name: Run Docker Image
       run: |
             docker run -d -p 5080:5080 --cap-add=NET_ADMIN sipgate/ganeti-docker/image
