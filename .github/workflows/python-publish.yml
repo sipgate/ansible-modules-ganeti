@@ -1,0 +1,15 @@
+on: [push, pull_request]
+name: Flatpak
+jobs:
+  test:
+    name: "Test Ansible Modules"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Pull the ganeti fake cluster docker image
+      run: docker pull sipgate/ganeti-docker/image:latest
+    - name: Run Docker Image
+      run: |
+            docker run -d -p 5080:5080 --cap-add=NET_ADMIN sipgate/ganeti-docker/image
+    - name: Test wether RAPI is running
+      run: curl localhost:5080
