@@ -14,12 +14,12 @@ jobs:
       run: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} docker.pkg.github.com
     - name: Pull the ganeti fake cluster docker image
       run: docker pull docker.pkg.github.com/sipgate/ganeti-docker/image:latest
-    - name: Run Docker Image
+    - name: Startup the ganeti fake cluster
       run: |
             docker run -d -p 5080:5080 --cap-add=NET_ADMIN docker.pkg.github.com/sipgate/ganeti-docker/image:latest
-    - name: Wait till RAPI is up and running
+    - name: Wait till the fake cluster and the ganeti RAPI is up and running
       run: until $(curl --output /dev/null --silent --fail --insecure https://localhost:5080/2/info); do printf '.'; sleep 5; done
-    - name: Test for cluster Info from RAPI
+    - name: Test - retrieve cluster info from RAPI
       run: curl --insecure https://localhost:5080/2/info
-    - name: Run tests
+    - name: Run tests for python modules
       run: pytest
