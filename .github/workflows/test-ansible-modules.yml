@@ -13,5 +13,5 @@ jobs:
     - name: Run Docker Image
       run: |
             docker run -d -p 5080:5080 --cap-add=NET_ADMIN docker.pkg.github.com/sipgate/ganeti-docker/image:latest
-    - name: Test wether RAPI is running
-      run: curl localhost:5080
+    - name: Wait till RAPI is up and running
+      run: until $(curl --output /dev/null --silent --fail --insecure https://localhost:5080/2/info); do printf '.'; sleep 5; done
