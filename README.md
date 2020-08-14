@@ -217,3 +217,16 @@ Returns an error if the instance does not exist.
 ### state: migrated
 
 Executes a live migration of the instance. The instance needs to be running.
+
+# Development
+
+## Testing
+
+The ansible modules are tested using `pytest` and a docker container containing a ganeti fake cluster (https://github.com/sipgate/ganeti-docker). The tests are fully integrated using Github Actions.
+
+### Run test locally
+
+```
+docker run -d -p 5080:5080 --cap-add=NET_ADMIN $docker_image_id
+pytest
+```
