@@ -8,18 +8,18 @@ jobs:
     - uses: actions/checkout@master
     - name: Install requirements
       run: |
-            sudo apt update && sudo apt install python3 python3-pip
-            sudo -H pip3 install pytest pytest-mock
+            sudo apt update && sudo apt install python3 python3-pip python3-setuptools python3-pycurl python3-simplejson
+            sudo -H pip3 install pytest pytest-mock ansible
     - name: Login to github docker repository
       run: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} docker.pkg.github.com
     - name: Pull the ganeti fake cluster docker image
       run: docker pull docker.pkg.github.com/sipgate/ganeti-docker/image:latest
-    - name: Run Docker Image
+    - name: Startup the ganeti fake cluster
       run: |
             docker run -d -p 5080:5080 --cap-add=NET_ADMIN docker.pkg.github.com/sipgate/ganeti-docker/image:latest
-    - name: Wait till RAPI is up and running
-      run: until $(curl --output /dev/null --silent --fail --insecure https://localhost:5080/2/info); do printf '.'; sleep 5; done
-    - name: Test for cluster Info from RAPI
+    - name: Wait till the fake cluster and the ganeti RAPI is up and running
+      run: n=0; until [ "$n" -ge 60 ]; do curl --output /dev/null --silent --fail --insecure https://localhost:5080/2/info && break; n=$((n+1)); sleep 5; done
+    - name: Test - retrieve cluster info from RAPI
       run: curl --insecure https://localhost:5080/2/info
-    - name: Run tests
+    - name: Run tests for python modules
       run: pytest
