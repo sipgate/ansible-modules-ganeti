@@ -389,13 +389,11 @@ def instance_create(module):
 
     # disks
     disks = _assemble_disks_for_rapi(module)
-    if len(disks) > 0:
-        params['disks'] = disks
+    params['disks'] = disks
 
     # nics
     nics = _assemble_nics_for_rapi(module)
-    if len(nics) > 0:
-        params['nics'] = nics
+    params['nics'] = nics
 
     # osparams
     if len(module.params['osparams']) > 0:
@@ -413,6 +411,10 @@ def instance_create(module):
 
 def _assemble_disks_for_rapi(module):
     disks = []
+
+    if not module.params['disks']:
+        return []
+
     disk_i = 0
     for disk in module.params['disks']:
         disk_params = _assemble_disk_params_for_rapi(module, disk)
@@ -448,6 +450,10 @@ def _assemble_disk_params_for_rapi(module, disk):
 def _assemble_nics_for_rapi(module):
     nics = []
     nic_i = 0
+
+    if not module.params['nics']:
+        return []
+
     for nic in module.params['nics']:
         nic_params = _assemble_nic_params_for_rapi(module, nic)
 
