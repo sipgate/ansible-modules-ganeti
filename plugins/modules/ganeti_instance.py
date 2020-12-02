@@ -337,6 +337,10 @@ reboot_required:
     description: Optional return value used when instances are modified. When it is set to true, a restart of the qemu process is necessary.
     returned: always
     type: bool
+changed_parameters:
+    description: If a instance is modified this contains all changed parameters. Currently only supported for growed disks.
+    returned: always
+    type: dict
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -516,6 +520,7 @@ def instance_modify(module):
     params_changed = False
     reboot_required = False
     message = ''
+    changed_parameters = {}
 
     params = {
         'beparams': {},
@@ -546,10 +551,11 @@ def instance_modify(module):
         params["beparams"]['maxmem'] = module.params['memory']
 
     # DISKs
-    changed_disks, disks = _modify_instance_assemble_disks(module, current_instance_parameters)
+    changed_disks, disks, disks_growed = _modify_instance_assemble_disks(module, current_instance_parameters)
     if changed_disks:
         changed = True
-        reboot_required = True
+        if len(disks_growed) > 0:
+            changed_parameters["disks_growed"] = disks_growed
         if len(disks) > 0:
             params_changed = True
             params["disks"] = disks
@@ -572,7 +578,7 @@ def instance_modify(module):
     if not changed:
         message = "Instance not modified."
 
-    return changed, reboot_required, message
+    return changed, changed_parameters, reboot_required, message
 
 
 def _modify_instance_tags(module, current_instance_parameters):
@@ -645,6 +651,7 @@ def _modify_instance_assemble_nics(module, current_instance_parameters):
 
 def _modify_instance_assemble_disks(module, current_instance_parameters):
     disks = []
+    disks_growed = []
     changed = False
 
     current_disk_sizes = current_instance_parameters["disk.sizes"]
@@ -672,10 +679,11 @@ def _modify_instance_assemble_disks(module, current_instance_parameters):
 
             job_id = client.GrowInstanceDisk(module.params["name"], index, size_to_grow_mb, wait_for_sync=True)
             wait_for_job_to_complete(module, job_id, "disk grow")
+            disks_growed.append(index)
         else:
             module.fail_json(name=module.params['name'], msg='Reducing a disks size is not supported.')
 
-    return changed, disks
+    return changed, disks, disks_growed
 
 
 def main():
@@ -724,6 +732,7 @@ def main():
     changed = False
     reboot_required = False
     message = ''
+    changed_parameters = {}
 
     module = AnsibleModule(
         argument_spec=module_args,
@@ -760,7 +769,7 @@ def main():
             else:
                 message = 'Instance needs to be halted to be renamed, status {0}'.format(instance['status'])
         elif module.params['state'] == 'present':
-            changed, reboot_required, message = instance_modify(module)
+            changed, changed_parameters, reboot_required, message = instance_modify(module)
         elif module.params['state'] == 'stopped':
             if instance['status'] not in ('ADMIN_down', 'ERROR_down'):
                 changed, message = instance_stop(module)
@@ -784,6 +793,7 @@ def main():
         changed=changed,
         message=message,
         reboot_required=reboot_required,
+        changed_parameters=changed_parameters,
     )
 
     module.exit_json(**result)
