@@ -357,8 +357,10 @@ def wait_for_job_to_complete(module, job_id, action: str):
     if module.params['wait']:
         success = client.WaitForJobCompletion(job_id, period=1, retries=module.params["job_timeout"])
         if not success:
+            ganeti_job_status = client.GetJobStatus(job_id)
             module.fail_json(name=module.params['name'],
-                             msg='{0} action failed with job_id: {1}'.format(action, job_id))
+                             msg='{0} action failed with job_id: {1}'.format(action, job_id),
+                             ganeti_job_status=ganeti_job_status)
         else:
             return (True, '{0} complete'.format(action))
     else:
