@@ -55,6 +55,7 @@ def test_dummy_instance_can_be_created(module_args, rapi_client):
         "ip_check": False,
         "name_check": "False",
         "no_install": "True",
+        "os_type": "noop",
         "hypervisor": "fake",
         "vcpus": str(vcpus),
         "memory": str(memory),
