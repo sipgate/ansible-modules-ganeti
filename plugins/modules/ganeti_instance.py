@@ -360,7 +360,8 @@ def wait_for_job_to_complete(module, job_id, action: str):
             ganeti_job_status = client.GetJobStatus(job_id)
             module.fail_json(name=module.params['name'],
                              msg='{0} action failed with job_id: {1}'.format(action, job_id),
-                             ganeti_job_status=ganeti_job_status)
+                             ganeti_job_oplog=ganeti_job_status.get("oplog"),
+                             ganeti_job_summary=ganeti_job_status.get("summary"))
         else:
             return (True, '{0} complete'.format(action))
     else:
