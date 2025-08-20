@@ -34,4 +34,4 @@ jobs:
       run: curl --insecure https://localhost:5080/2/info
 
     - name: Run tests for python modules
-      run: pytest
+      run: pytest -vv
