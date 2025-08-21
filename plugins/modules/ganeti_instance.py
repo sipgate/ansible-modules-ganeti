@@ -346,9 +346,12 @@ changed_parameters:
 from ansible.module_utils.basic import AnsibleModule
 
 try:
-    from ansible_collections.sipgate.ganeti.plugins.module_utils.ganeti_rapi_client import GanetiRapiClient, GanetiApiError
+    from ansible_collections.sipgate.ganeti.plugins.module_utils.ganeti_rapi_client import (
+        GanetiApiError,
+        GanetiRapiClient,
+    )
 except:
-    from ganeti_rapi_client import GanetiRapiClient, GanetiApiError
+    from ganeti_rapi_client import GanetiApiError, GanetiRapiClient
 
 client: GanetiRapiClient = None
 
@@ -527,6 +530,7 @@ def instance_modify(module):
 
     params = {
         'beparams': {},
+        'hotplug': False,
         'conflicts_check': module.params['conflicts_check'],
         'wait_for_sync': module.params['wait_for_sync']
     }

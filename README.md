@@ -15,12 +15,12 @@ The API is documented [here](http://docs.ganeti.org/ganeti/2.16/html/rapi.html).
 
 ## Dependencies / expected environment
 
-The modules are developed against version **2.15** and **2.16** of Ganeti and thus
-RAPI, running on a Debian Jessie, Stretch and Buster (8, 9, 10) hosts. The Python interpreter is
+The modules are developed against version **3.0** and **3.1** of Ganeti and thus
+RAPI, running on a Debian Bullseye, Bookworm, Trixie (11, 12, 13) hosts. The Python interpreter is
 assumed to be Python 3.7. While the
 code does not use features introduced after Python 3.5, no care is taken
 to remain backwards compatible with earlier Python versions, especially
-not **2.x**. It is also tested to work on Ansible **2.10**.
+not **2.x**. It is also tested to work on Ansible **2.17**.
 
 ## Build and install
 
@@ -32,6 +32,7 @@ ansible-galaxy collection install sipgate-ganeti-$version.tar.gz --force
 ## Validate module
 
 ```
+cd /$HOME/.ansible/collections/ansible_collections/sipgate/ganeti
 ansible-test sanity --test validate-modules
 ```
 
