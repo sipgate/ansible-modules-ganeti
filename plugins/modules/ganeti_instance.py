@@ -755,17 +755,17 @@ def main():
     except GanetiApiError as e:
         instance = None
         if "Cloud not resolve host" in str(e):
-            module.fail_json(message='Could not resolve ganeti master {0}'.format(module.params['address']))
+            module.fail_json(msg='Could not resolve ganeti master {0}'.format(module.params['address']))
         elif "404 Not Found: Nothing matches the given URI" in str(e):
             instance = None
         else:
-            module.fail_json(message=str(e))
+            module.fail_json(msg=str(e))
 
     if not instance:
         if module.params['state'] == 'present':
             changed, message = instance_create(module)
         elif module.params['state'] in ('restarted', 'started', 'stopped', 'migrated'):
-            module.fail_json(message='Instance {0} is not present, can\'t set to {1}'.format(module.params['name'],
+            module.fail_json(msg='Instance {0} is not present, can\'t set to {1}'.format(module.params['name'],
                                                                                              module.params['state']))
         else:
             message = 'No instance found'
